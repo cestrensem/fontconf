@@ -99,7 +99,7 @@ body {
 	display: inline-block;
 
 	text-align: left;
-	margin: 0 0 0 1em;
+	margin: .5em 0 0 1em;
 }
 
 .reveal ol {
@@ -124,6 +124,10 @@ body {
 .reveal ol ul {
 	display: block;
 	margin-left: 40px;
+}
+
+.reveal li + li {
+	margin-top: .25em;
 }
 
 .reveal dt {
@@ -166,8 +170,9 @@ body {
 	line-height: 1.2em;
 
 	word-wrap: break-word;
-
-	box-shadow: 0px 0px 6px rgba(0,0,0,0.3);
+	font-size: 0.45em;
+	margin-top: 2em;
+	margin-bottom: 2em;
 }
 
 .reveal code {
@@ -179,7 +184,7 @@ body {
 	display: block;
 	padding: 5px;
 	overflow: auto;
-	max-height: 400px;
+	max-height: 800px;
 	word-wrap: normal;
 }
 

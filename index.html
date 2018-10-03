@@ -1,49 +1,1049 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+        <title>reveal.js</title>
 
-		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/white.css">
 
-		<!-- Theme used for syntax highlighting of code -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- Theme used for syntax highlighting of div -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+        <style>
+            .hero {
+                position: fixed;
+                text-align: left;
+                top: 5%;
+                left: 5%;
+                font-size: 44px !important
+            }
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.js"></script>
+            .hero h2 {
+                margin-top: 1em !important;
+                text-transform: none;
+            }
 
-		<script>
-			// More info about config & dependencies:
-			// - https://github.com/hakimel/reveal.js#configuration
-			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
-				dependencies: [
-					{ src: 'plugin/markdown/marked.js' },
-					{ src: 'plugin/markdown/markdown.js' },
-					{ src: 'plugin/notes/notes.js', async: true },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
-				]
-			});
-		</script>
-	</body>
+            blockquote {
+                font-size: 1.8em !important;
+                margin: 0 !important;
+                width: 100% !important;
+                font-family: "Times new roman", serif !important;
+                background: rgba(0, 0, 0, 0.04) !important;
+                padding: 1em !important;
+                box-sizing: border-box;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides" data-transition="fade">
+                <section data-background="/img/1.png" style="height: 100%; padding: 0">
+                    <img src="/img/yiii.png" style="border: none;
+    box-shadow: none;
+    width: 22%;
+    position: absolute;
+    bottom: 13%;
+    right: 7%;
+    margin: 0;
+    background: #ffda00;
+    border-radius: 50%;" />
+                    <div class="hero">
+                        <h2 style="position: relative">
+                            Можно ли делать быстрый сервис<br>без Server Side Rendering
+                        </h2>
+                        <h4 style="font-weight: normal; margin-top: 1em; text-transform: none;">Якобчук Андрей (Ultimate Guitar)</h4>
+                    </div>
+                </section>
+                <section data-transition="fade" style="padding: 0; margin: -38px;">
+                    <div style=" display: flex !important; align-items: center">
+                        <img src="/img/mar.jpg" style="border: none; box-shadow: none" />
+                        <div style="padding-left: 5%; margin-top: -10%; text-align: left">
+                            <h2>Про меня</h2>
+                            <p>Ведущий фронтенд Ultimate Guitar.<br>Не пью, не курю, <del>не</del> ругаюсь матом (грязно)</p>
+                        </div>
+                    </div>
+                </section>
+                <section data-background="/img/ug.png" style="color: #fff">
+                    <div style="display: flex; flex-direction: column; align-items: center">
+                        <img src="/img/logo.png" style="box-shadow: none;
+                            border: 0;
+                            background: no-repeat;
+                            width: 670px;" />
+                        <ul style="
+    font-size: 90px;
+    margin-top: 1em;
+">
+                            <li>
+                                #1 в мире гитаристов
+                            </li>
+                            <li>
+                                20 лет на рынке
+                            </li>
+                            <li>
+                                Более 64 миллионов визитов в месяц
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Agenda</h2>
+                    <ol>
+                        <li>
+                            Наша история
+                        </li>
+                        <li>
+                            Разработка через Аналитику
+                        </li>
+                        <li>
+                            Ограничения на страже скорости
+                        </li>
+                        <li>
+                            Как не грузить лишнего
+                        </li>
+                        <li>
+                            Как уменьшить размер бандла
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <section>
+                        <h1>Наша история</h1>
+                    </section>
+                    <section data-background="/img/boring.gif">
+                    </section>
+                    <section>
+                        <ul>
+                            <li>
+                                неконсистентность дизайна на web и в native
+                            </li>
+                            <li>
+                                разработка на нативе идет медленно
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Выход -<br>React + React native</h2>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>
+                                Быстрее пилить
+                            </li>
+                            <li>
+                                Фичу делает один человек
+                            </li>
+                            <li>
+                                Можно шарить код
+                            </li>
+                            <li>
+                                Кроссплатформенная дизайн система
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Первый прототип<br>на React Native</h2>
+                        <ul>
+                            <li>
+                                за 4 недели с изучением React native
+                            </li>
+                            <li>
+                                старое за 4 месяца
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>
+                            Пришла, очередь веба.
+                        </h2>
+                    </section>
+                    <section data-background="/img/gomer.png">
+                        <h2><span class="fragment" style="font-size: 4em;color:#fff; text-shadow: 0 0 20px #000">Без SSR
+                        </span></h2>
+                    </section>
+                    <section>
+                        <ol>
+                            <li>
+                                слишком дорого: +50% серверных мощностей
+                            </li>
+                            <li class="fragment">
+                                надо увеличивать команду
+                            </li>
+                            <li class="fragment">
+                                минус скорость разработки
+                            </li>
+                            </ul>
+                    </section>
+                    <section>
+                        <h2>
+                            Первый релиз через<br><span class="fragment" style="font-size: 1.5em">5 недель</span>
+                        </h2>
+                    </section>
+                    <section>
+                        <h2>
+                            Новые метрики
+                        </h2>
+                        <ul>
+                            <li>
+                                Layout DOM ready
+                            </li>
+                            <li>
+                                Page content ready <span class="fragment">⇒ DOM ready</span>
+                            </li>
+                        </ul>
+                    </section>
+                    <section data-background="/img/13.png"></section>
+                    <section data-background="/img/14.png"></section>
+                    <section>
+                        <h2>На десктопе даже<br>стало получше</h2>
+                        <ul>
+                            <li>
+                                Когда интернет широкий, то и проблем нет
+                            </li>
+                            <li>
+                                Dom ready - 0.9с
+                            </li>
+                            <li>
+                                PageSpeed > 90
+                            </li>
+                        </ul>
+                    </section>
+                    <section data-background="/img/7_4.gif">
+                        <h2 style="color: #fff; font-size: 2em">На мобе - боль</h2>
+                    </section>
+                    <section>
+                        <h2>
+                            Первый подход
+                        </h2>
+                        <ul>
+                            <li>
+                                Выкатываемся на главную контентную страницу &mdash; <b>70% трафика</b>
+                            </li>
+                            <li>
+                                Старая версия &mdash; <b>3.8c</b> на 3G. Новая &mdash; <b>5.0c</b>
+                            </li>
+                            <li>
+                                Проигрыш &mdash; <b>-50%</b> c мобильного маркетинга
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>
+                            Второй подход
+                        </h2>
+                        <ul>
+                            <li>
+                                Перестраховываемся. Берем списки
+                            </li>
+                            <li>
+                                Оптимизируем &mdash; <b>-20%</b> к размеру бандла
+                            </li>
+                            <li>
+                                Старая версия <b>2.5c</b> на 3G. Новая &mdash; <b>3.2с</b>.
+                            </li>
+                            <li>
+                                iOS &mdash; все ок
+                            </li>
+                            <li>
+                                Android &mdash; <b>-10%</b> c мобильного маркетинга
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>
+                            Третий подход
+                        </h2>
+                        <ul>
+                            <li>
+                                Webpack 4 &mdash; <b>-13%</b> от веса бандла
+                            </li>
+                            <li>
+                                Сборка на спеке es2017
+                            </li>
+                        </ul>
+                    </section>
+                    <section data-background="/img/leo.gif">
+                        <h1 style="color: #fff; font-size: 5em">Success</h1>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h1>Разработка через Аналитику</h1>
+                    </section>
+                    <section data-background="/img/22.jpg">
+                        <blockquote style="color: #fff">Все должно быть измерено</blockquote>
+                    </section>
+                    <section>
+                        <h2>
+                            Различные<br>метрики загрузки
+                        </h2>
+                        <ul>
+                            <li>
+                                Server response time
+                            </li>
+                            <li>
+                                TTFB
+                            </li>
+                            <li>
+                                DOM ready
+                            </li>
+                            <li>
+                                и т.д
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Дополнительные<br>метрики</h2>
+                        <ul>
+                            <li>layout ready</li>
+                            <li>page content ready</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Мерить под разными разрезами</h2>
+                        <ul>
+                            <li>типы устройств</li>
+                            <li>сети (2G, 3G, 4G...)</li>
+                            <li>регионы</li>
+                        </ul>
+                    </section>
+                    <section data-background="/img/26.png"></section>
+                    <section>
+                        <img src="/img/google.png" style="border: 0;box-shadow: none" />
+                        <h2>На дружбе у гугла</h2>
+                    </section>
+                    <section data-background="/img/27.png"></section>
+                    <section data-background="/img/28.png"></section>
+                    <section>
+                        <h2>Сбор метрик</h2>
+                        <ul>
+                            <li>
+                                Скорость загрузки
+                                <ul>
+                                    <li>
+                                        Агрегируем метрики <b>window.performance.timing</b>
+                                    </li>
+                                    <li>
+                                        Почасовая агрегация
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                Pagespeed - собираем через <b>API v4</b> Google
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h1>Ограничения на страже скорости</h1>
+                    </section>
+                    <section>
+                        <blockquote>"Хорошая сиcтема - эта&nbsp;та, которая позволяет избежать ошибок"
+</blockquote>
+                    </section>
+                    <section data-background="/img/maxresdefault.jpg">
+                    
+                    </section>
+                    <section>
+                        <h2>Ты не задеплоишь, если</h2>
+                        <ul>
+                            <li>
+                                Превышен размер любого чанка в 220000 байт (60-65кб GZIP)
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>
+                            Vendor Lock
+                        </h2>
+                    </section>
+                    <section data-background="/img/bor.png">
+                    </section>
+                    <section>
+                        <ul>
+                            <li>
+                                99% вещей можно решить текущими средствами
+                            </li>
+                            <li>
+                                два похожих решения нельзя
+                            </li>
+                            <li>
+                                проведи исследование
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h1>
+                            Как не грузить лишнего
+                        </h1>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>
+                                Бейте код по роутам
+                            </li>
+                            <li>
+                                Redux store splitting
+                            </li>
+                            <li>
+                                Redux async loading actions
+                            </li>
+                            <li>
+                                Графика в webp
+                            </li>
+                            <li>
+                                Оптимизвация графики на лету
+                            </li>
+                            <li>
+                                Реклама. Waterfall vs Header Bidding
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <p>textTabLoader.js</p>
+                        <pre><div>export default () => [
+    import('./TextTabContentContainer'),
+    import('../aside/TabAside'),
+    import('../dataConverter/tabDataConverterDesktop'),
+    import('../../../../reducers/page/tabContentReducer'),
+]</div></pre>
+                    </section>
+                    <section>
+                        <p>containersMap.js</p>
+                        <pre><div>export default {
+    [PAGE_TYPE_ERROR]: getErrorContainer,
+    [PAGE_TYPE_MAIN]: getMainContainers,
+    [PAGE_TYPE_TAB_BLOCKED]: getTabBlockedContainers,
+    [PAGE_TYPE_TAB_TEXT]: getTabTextContainers,
+    // ...
+}</div></pre>
+                    </section>
+                    <section>
+                        <p>routingMap.js</p>
+                        <pre><div>export default {
+    'ug-web': {
+        collections: {
+            index: PAGE_TYPE_COLLECTIONS,
+            view: PAGE_TYPE_COLLECTION,
+        },
+        artist: {
+            bandsAlpha: PAGE_TYPE_SEARCH_LETTER,
+            [ROUTE_TYPE_DEFAULT]: PAGE_TYPE_ARTIST,
+        },
+    }
+}
+</div></pre>
+                    </section>
+                    <section>
+                        <pre><div>export const getLoaderType = ({ routingMap, defaultLoader }) => props => {
+    if (props.controller === 'system' && props.action === 'error') {
+        return PAGE_TYPE_ERROR
+    }
+
+    return routingMap?[props.module]?[props.controller]?[props.action] || defaultLoader
+}
+                        </div></pre>
+                    </section>
+                    <section>
+                        <pre><div>class PageContainer {
+    loadByPage() {
+        this.pageLoaderMap[getLoaderType(this.routeProps)]().then(this.update)
+    }
+
+    update = chunks => {
+        const [ Content, Aside, convert ] = chunks.map(chunk => chunk && chunk.default)
+
+        this.AsideContainer = Aside
+        this.ContentContainer = Content
+
+        this.props.convertPageData({ payload: this.data, convert })
+    }
+}
+                        </div></pre>
+                    </section>
+                    <section>
+                        <h2>
+                            Redux store splitting
+                        </h2>
+                        <pre>const createStore = ({ initialState, reducers }) => {
+    const middlewares = [applyMiddleware(thunk)]
+    const createStoreWithMiddleware = compose(...middlewares)(createStore)
+    const store = createStoreWithMiddleware(combineReducers(reducers), initialState)
+
+    <b>store.reducers = reducers
+    store.asyncReducers = {}</b>
+
+    return store
+}
+                        </pre>
+                    </section>
+                    <section>
+                        <pre>const injectAsyncReducer = ({ store, name, asyncReducer }) => {
+    <b>store.asyncReducers[name] = asyncReducer</b>
+    store.replaceReducer(combineReducers({
+        ...store.reducers,
+        ...store.asyncReducers,
+    }))
+}</pre>
+                    </section>
+                    <section>
+                        <pre>const injectAsyncReducer = ({ store, name, asyncReducer }) => {
+    store.asyncReducers[name] = asyncReducer
+    <b>store.replaceReducer(combineReducers({
+        ...store.reducers,
+        ...store.asyncReducers,
+    }))</b>
+}</pre>
+                    </section>
+                    <section>
+                        <pre>class PageContainer {
+    update = chunks => {
+        const [ Content, Aside, convert, asyncReducer ] = chunks
+            .map(chunk => chunk && chunk.default)
+        
+        //...
+        <b>injectAsyncReducer({
+            store: this.context.store,
+            name: STORE_REDUCER_NAME_CONTENT,
+            asyncReducer,
+        })</b>
+    }
+}
+
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>
+                            Redux async<br>loading actions
+                        </h2>
+                    </section>
+                    <section>
+                        <pre>const getLoadableAction =
+    <b>getLoader =></b>
+        ({ name, async }) =>
+            (...args) => (dispatch, getState) =>
+                getLoader().then(({ [name]: action }) => {
+                    const result = action(...args)
+                    async ? result(dispatch, getState) : dispatch(result)
+                })
+}
+</pre>
+                    </section>
+                    <section>
+                        <pre>const getLoadableAction =
+    getLoader =>
+        <b>({ name, async }) =></b>
+            (...args) => (dispatch, getState) =>
+                getLoader().then(({ [name]: action }) => {
+                    const result = action(...args)
+                    async ? result(dispatch, getState) : dispatch(result)
+                })
+}
+</pre>
+                    </section>
+                    <section>
+                        <pre>const getLoadableAction =
+    getLoader =>
+        ({ name, async }) =>
+            <b>(...args) => (dispatch, getState) =></b>
+                getLoader().then(({ [name]: action }) => {
+                    const result = action(...args)
+                    async ? result(dispatch, getState) : dispatch(result)
+                })
+}
+</pre>
+                    </section>
+                    <section>
+                        <pre>const getLoadableAction =
+    getLoader =>
+        ({ name, async }) =>
+            (...args) => (dispatch, getState) =>
+                <b>getLoader().then(({ [name]: action }) => {
+                    const result = action(...args)
+                    async ? result(dispatch, getState) : dispatch(result)
+                })</b>
+}
+</pre>
+                    </section>
+                    <section>
+                        <pre>import { getLoadableAction } from '@ug/helpers/redux'
+                        
+const getCommentsActionsLoader = () => import('./commentsActions')
+const getCommentsAction = getLoadableAction(getCommentsActionsLoader)
+
+export const addComment = getCommentsAction({ name: 'addComment', async: true })
+export const editComment = getCommentsAction({ name: 'editComment', async: true })
+//...
+</pre>
+                    </section>
+                    <section>
+                        <h2>
+                            Графика. WebP
+                        </h2>
+                    </section>
+                    <section data-background="/img/53.png"></section>
+                    <section data-background="/img/webp.png"></section>
+                    <section data-background="/img/cat.gif">
+                        <h2 style="color:#fff; text-shadow: 0 0 20px #000">Оптимизация графики<br>на лету</h2>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>микросервис на Go</li>
+                            <li class="fragment">умеет сжимать картинки и ресайзить их на лету
+</li>
+                            <li class="fragment">50 картинок в секунду</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <pre><div>const MyComponent = ({ url, title }) => (
+    &lt;ResponsiveImage url={url} size={40} alt={title} /&gt;
+)
+</div></pre>
+                    </section>
+                    <section>
+                        <p><a href="https://github.com/ultimate-guitar/reImage
+">https://github.com/ultimate-guitar/reImage</a></p>
+                    </section>
+                    <section>
+                        <h2>Кастомная типографика</h2>
+                        <ul>
+                            <li class="fragment">грузим асинхронно</li>
+                            <li class="fragment">стили храним у себя</li>
+                            <li class="fragment">не используем на мобе)))</li>
+                        </ul>
+                    </section>
+                    <section data-background="/img/58.png">
+                    </section>
+                    <section>
+                        <h1>Load<br>15s => 2s</h1>
+                    </section>
+                    <section>
+                        <p><a href="http://prebid.org/">http://prebid.org/</a></p>
+                    </section>
+                    <section>
+                        <h2>WIP: Prebid Server</h2>
+                        <p>Все то же самое, но торги на сервере<br><a href="https://github.com/prebid/prebid-server"></a>
+                        
+</p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <blockquote>Не надо грузить всю страницу целиком</blockquote>
+                    </section>
+                    <section>
+                        <h2>Показывай только то,<br>что во viewport</h2>
+                        <ul>
+                            <li>React Async Components</li>
+                            <li>Cтили по частям</li>
+                            <li>Aсинхронная реклама</li>
+                            <li>Асинхронная графика</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>React Async Components</h2>
+                        <ul>
+                            React loadable <a href="https://github.com/jamiebuilds/react-loadable/">https://github.com/jamiebuilds/react-loadable/</a>
+                        </ul>
+                    </section>
+                    <section>
+                        <pre><div>import Loadable from 'react-loadable'
+import logHelper from './logHelper'
+                    
+export default loader => Loadable({
+    loader,
+    loading(props) {
+        if (props.error) {
+            logHelper.error(props.error)
+        }
+        return null
+    },
+})    
+</div></pre>
+                    </section>
+                    <section>
+                        <pre><div>import createLoadable from '@ug/helpers/createLoadable'
+
+const loadFooterContainer = () => import('./FooterContainer')
+
+export default createLoadable(loadFooterContainer)</div></pre>
+                    </section>
+                    <section>
+                        <h2>Стили грузим по частям</h2>
+                        <p>Вместе с компонентами дизайн системы.</p>
+                        <ul>
+                            <li>Только те стили, которые нужны</li>
+                            <li>Без дополнительных запросов</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Асинхронно подгружаемая реклама</h2>
+                    </section>
+                    <section>
+                        <img src="img/ad.gif" />
+                    </section>
+                    <section>
+                        <h2>Ленивая подгрузка картинок</h2>
+                        <p><a href="https://github.com/aFarkas/lazysizes
+    ">https://github.com/aFarkas/lazysizes</a></p>
+                    </section>    
+                    <section>
+                        <img src="/img/images.gif" alt="">
+                    </section>
+                    <section>
+                        <h2>Оптимистичный рендеринг</h2>
+                        <p>Здесь обычный процесс ретингования (гифка)</p>
+                    </section>
+                    <section>
+                        <h2>Оптимистичный рендеринг</h2>
+                        <p>Здесь то же, но с оптимистичным рендерингом (гифка)</p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h1>Как уменьшить размер бандла</h1>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>
+                                React, который не React
+                            </li>
+                            <li>
+                                Аглификация имен классов
+                            </li>
+                            <li>
+                                Вкусные возможности es2017...
+                            </li>
+                            <li>
+                                Babel 7
+                            </li>
+                            <li>
+                                Webpack 4
+                            </li>
+                           
+                        </ul>
+                    </section>
+                    <section data-background="/img/fake.jpg">
+                        <h2 style="color: #fff">React, который не React</h2>
+                    </section>
+                    <section>
+                        <p>
+                            Preact <a href="https://preactjs.com/">https://preactjs.com/</a>
+                        </p>
+                        <ul>
+                            <li>
+                                32 кб GZIP кода (React + React DOM)
+                            </li>
+                            <li>
+                                6кб GZIP кода (Preact + Preact-Compat)
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Для фронта без изменений</h2>
+                        <pre>module.exports = {
+    resolve: {
+        alias: {
+            react: 'preact-compat',
+            'react-dom': 'preact-compat',
+            // ...
+        },
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h2>Аглификация имен классов</h2>
+                    </section>
+                    <section data-background="/img/77.png"></section>
+                    <section data-background="/img/78.png"></section>
+                    <section>
+                        <h2>Вкусные возможности es2017...</h2>
+                    </section>
+                    <section>
+                        <h2><del>Вкусные возможности es2017...</del></h2>
+                    </section>
+                    <section>
+                        <h2>
+                            Async/await
+                        </h2>
+                    </section>
+                    <section>
+                        <h2>
+                            До
+                        </h2>
+                        <pre><div>const getSymbolContent = async filePath => {
+    const content = await readFileAsync(filePath)
+    return unwrap(content)
+}</div></pre>
+                    </section>
+                    <section>
+                        <h2>
+                            После
+                        </h2>
+                        <pre><div style="font-size: 0.48em;
+    line-height: normal;">function _asyncToGenerator(fn) { 
+    return function () { 
+        var gen = fn.apply(this, arguments); r
+        return new Promise(function (resolve, reject) { 
+            function step(key, arg) { try {
+                 var info = gen[key](arg); var value = info.value; 
+            } catch (error) { 
+                reject(error); return; 
+            } if (info.done) { 
+                resolve(value); 
+            } else { 
+                return Promise.resolve(value).then(function (value) { 
+                    step("next", value); }, function (err) { step("throw", err); }); 
+                } 
+            } 
+            return step("next"); 
+        }); 
+    }; 
+}
+
+var getSymbolContent = function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(filePath) {
+    var content;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return readFileAsync(filePath);
+
+          case 2:
+            content = unwrap(_context.sent);
+            return _context.abrupt("return");
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, undefined);
+  }));
+
+  return function getSymbolContent(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();</div></pre>
+                    </section>
+                    <section>
+                        <h2>
+                            То же самое на Promise
+                        </h2>
+                        <pre><div>const getSymbolContent = filePath => readFileAsync(filePath).then(unwrap)</div></pre>
+                    </section>
+                    <section>
+                        <h2>
+                            То же самое на Promise
+                        </h2>
+                        <pre><div>const getSymbolContent = function(filePath) {
+    return readFileAsync(filePath).then(unwrap)
+}</div></pre>
+                    </section>
+                    <section>
+                        <h2>А теперь пожмем</h2>
+                        <pre><div>var r=function(){var r=_asyncToGenerator(regeneratorRuntime.mark(function r(e){var n;return
+                        regeneratorRuntime.wrap(function(r){for(;;)switch(r.prev=r.next){case 0:return r.next=2,y(x);case 2:return
+                        n=r.sent,r.abrupt("return",u(n));case 4:case"end":return r.stop()}},r,void 0)}));return function(e){return
+                        r.apply(this,arguments)}}();</div></pre>
+                        <pre><div>var m=function(n){return b(x).then(e)};</div></pre>
+                    </section>
+                    <section>
+                        <h1>334 БАЙТА<br>vs<br>39 БАЙТ</h1>
+                    </section>
+                    <section>
+                        <h2>Классы против функций</h2>
+                    </section>
+                    <section>
+                        <pre><div>class NotificationMobilePageContainer extends Component {
+    render() {
+        return this.props.isOpen && &lt;AsyncUserNotificationsContainer /&gt;
+    }
+}
+
+connect(state => ({
+    isOpen: state.notifications.isOpen,
+}))(NotificationMobilePageContainer)</div></pre>
+                    </section>
+                    <section>
+                        <pre><div style="font-size: .85em;line-height: normal;">function e() {
+    return function(n, t) {
+        if (!(n instanceof t))
+            throw new TypeError("Cannot call a class as a function")
+    }(this, e),
+    function(n, t) {
+        if (!n)
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        return !t || "object" != typeof t && "function" != typeof t ? n : t
+    }(this, t.apply(this, arguments))
+}
+return function(n, t) {
+    if ("function" != typeof t && null !== t)
+        throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+    n.prototype = Object.create(t && t.prototype, {
+        constructor: {
+            value: n,
+            enumerable: !1,
+            writable: !0,
+            configurable: !0
+        }
+    }),
+    t && (Object.setPrototypeOf ? Object.setPrototypeOf(n, t) : n.__proto__ = t)
+}(e, t),
+                        </div></pre>
+                    </section>
+                    <section>
+                        <h1>+649 байт<br>на класс</h1>
+                    </section>
+                    <section>
+                        <div><pre>
+var NotificationMobilePageContainer = (function(_Component) {
+  _inherits(NotificationMobilePageContainer, _Component);
+
+  function NotificationMobilePageContainer() {
+    _classCallCheck(this, NotificationMobilePageContainer);
+
+    return _possibleConstructorReturn(this, _Component.apply(this, arguments));
+  }
+
+  NotificationMobilePageContainer.prototype.render = function render() {
+    return (
+      this.props.isOpen &&
+      React.createElement(AsyncUserNotificationsContainer, null)
+    );
+  };
+
+  return NotificationMobilePageContainer;
+})(Component);
+
+connect(function(state) {
+  return {
+    isOpen: state.notifications.isOpen
+  };
+})(NotificationMobilePageContainer);
+</pre></div>
+                    </section>
+                    <section>
+                        <h2>То же самое в функцианальном стиле</h2>
+                        <div><pre>compose(
+      connect(state => ({
+          isOpen: state.notifications.isOpen,
+      })),
+      branch(props => props.isOpen, renderNothing)
+)(NotificationMobilePageContainer)
+</pre></div>
+                    </section>
+                    <section>
+                        <h1>355 байт<br>vs<br>94 байта</h1>
+                    </section>
+                    <section>
+                        <blockquote>Стиль программирования влияет на вес приложения</blockquote>
+                    </section>
+                    <section>
+                        <h2>Babel 7</h2>
+                        <ul>
+                            <li>
+                                <b>-20%</b> к весу бандла
+                            </li>
+                            <li>
+                                Держите сборку в loose режиме нам дало еще <b>-3%</b>
+                            </li>
+                            <li>
+                                Babel runtime тащится по частям
+                            </li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Webpack 4</h2>
+                        <ul>
+                            <li>
+                                Более быстрая сборка &mdash; деплой 1:40 ⇒ 1:10 мин
+                            </li>
+                            <li>
+                                <b>-13%</b> к общему весу сборки
+                            </li>
+                            <li>
+                                Tree shaking, работает но с оговорками
+                            </li>
+                        </ul>
+                    </section>
+                </section>
+                <section>
+                    <section data-background="/img/doctor.jpg">
+                        <h1 style="color: white; ">
+                            Заключение
+                        </h1>
+                    </section>
+                    <section>
+                        <ul>
+                            <li>Думай о пользователе</li>
+                            <li>Измеряй все, что можешь</li>
+                            <li>Системные решения решают</li>
+                            <li>Можно жить без SSR, только осторожно)))</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <div style="padding: 0 5%">
+                            <h2>Первый шаг по ускорению</h2>
+                            <ol>
+                                <li>
+                                    Выберите 1-2 инструмента/приема.
+                                </li>
+                                <li>
+                                    Запостите на Facebook/Twitter с хештегами <b>#fontendconf</b> <b>#скоростьнашевсе</b>
+                                </li>
+                                <li>
+                                    Пишите мне, если появятся вопросы
+                                </li>
+                            </ol>
+                        </div>
+                    </section>
+                    <section data-background="/img/contact.png">
+                    </section>
+                    <section data-background="/img/last.png">
+                    </section>
+                    <section data-background="/img/god.png">
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                history: true,
+                width: '100%',
+                height: '100%',
+                transition: 'fade', 
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/search/search.js', async: true },
+                    { src: 'plugin/zoom-js/zoom.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
 </html>
