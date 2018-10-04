@@ -151,17 +151,6 @@
                         </ul>
                     </section>
                     <section>
-                        <h2>Первый прототип<br>на React Native</h2>
-                        <ul>
-                            <li>
-                                за 4 недели с изучением React native
-                            </li>
-                            <li>
-                                старое за 4 месяца
-                            </li>
-                        </ul>
-                    </section>
-                    <section>
                         <h2>
                             Пришла, очередь веба.
                         </h2>
@@ -181,12 +170,7 @@
                             <li class="fragment">
                                 минус скорость разработки
                             </li>
-                            </ul>
-                    </section>
-                    <section>
-                        <h2>
-                            Первый релиз через<br><span class="fragment" style="font-size: 1.5em">5 недель</span>
-                        </h2>
+                        </ol>
                     </section>
                     <section>
                         <h2>
@@ -287,11 +271,11 @@
                         <h1>Разработка через Аналитику</h1>
                     </section>
                     <section data-background="img/22.jpg">
-                        <blockquote style="color: #fff">Все должно быть измерено</blockquote>
+                        <blockquote style="color: #fff">"Все должно быть измерено"</blockquote>
                     </section>
                     <section>
                         <h2>
-                            Различные<br>метрики загрузки
+                            Различные метрики<br>загрузки страницы
                         </h2>
                         <ul>
                             <li>
@@ -316,7 +300,7 @@
                         </ul>
                     </section>
                     <section>
-                        <h2>Мерить под разными разрезами</h2>
+                        <h2>Мерить под разными<br>разрезами</h2>
                         <ul>
                             <li>типы устройств</li>
                             <li>сети (2G, 3G, 4G...)</li>
@@ -369,7 +353,7 @@
                     </section>
                     <section>
                         <h2>
-                            Vendor Lock
+                            Ограничение<br>по технологическому стеку
                         </h2>
                     </section>
                     <section data-background="img/bor.png">
@@ -407,92 +391,209 @@
                                 Графика в webp
                             </li>
                             <li>
-                                Оптимизвация графики на лету
+                                Оптимизация графики на лету
                             </li>
                             <li>
                                 Реклама. Waterfall vs Header Bidding
                             </li>
+                            <li>
+                                Как не грузить всю старницу целиком
+                            </li>
                         </ul>
                     </section>
                     <section>
-                        <p>textTabLoader.js</p>
-                        <pre><div>export default () => [
-    import('./TextTabContentContainer'),
-    import('../aside/TabAside'),
-    import('../dataConverter/tabDataConverterDesktop'),
-    import('../../../../reducers/page/tabContentReducer'),
-]</div></pre>
+                        <h2>Бейте код по роутам</h2>
                     </section>
                     <section>
-                        <p>containersMap.js</p>
-                        <pre><div>export default {
-    [PAGE_TYPE_ERROR]: getErrorContainer,
-    [PAGE_TYPE_MAIN]: getMainContainers,
-    [PAGE_TYPE_TAB_BLOCKED]: getTabBlockedContainers,
-    [PAGE_TYPE_TAB_TEXT]: getTabTextContainers,
-    // ...
-}</div></pre>
-                    </section>
-                    <section>
-                        <p>routingMap.js</p>
-                        <pre><div>export default {
-    'ug-web': {
-        collections: {
-            index: PAGE_TYPE_COLLECTIONS,
-            view: PAGE_TYPE_COLLECTION,
+                        <h3>Получаем тип страницы</h3>
+                        <pre>const routingMap = {
+    tab: {
+        textTab: {
+            index: PAGE_TYPE_TAB_TEXT,
         },
-        artist: {
-            bandsAlpha: PAGE_TYPE_SEARCH_LETTER,
-            [ROUTE_TYPE_DEFAULT]: PAGE_TYPE_ARTIST,
-        },
+    },
+    common: {
+        system: {
+            error: {
+                [ROUTE_TYPE_DEFAULT]: PAGE_TYPE_ERROR,
+            }
+        }
     }
 }
-</div></pre>
-                    </section>
-                    <section>
-                        <pre><div>export const getLoaderType = ({ routingMap, defaultLoader }) => props => {
-    if (props.controller === 'system' && props.action === 'error') {
-        return PAGE_TYPE_ERROR
-    }
 
-    return routingMap?[props.module]?[props.controller]?[props.action] || defaultLoader
-}
-                        </div></pre>
+<div class="fragment">const getLoaderType = ({ routingMap, defaultLoader }) => props => (
+    routingMap?[props.module]?[props.controller]?[props.action] || defaultLoader
+)</div>
+</pre>
                     </section>
                     <section>
-                        <pre><div>class PageContainer {
-    loadByPage() {
-        this.pageLoaderMap[getLoaderType(this.routeProps)]().then(this.update)
-    }
+                    <h3>Готовим мепинг страниц по типам</h3>
+                        <pre>const textTabLoader = () => [
+    import(/* webpackChunkName: 'tab_text' */ './TextTabContentContainer'),
+    import(/* webpackChunkName: 'tab_text' */ '../dataConverter/tabDataConverterDesktop'),
+]
+
+<div class="fragment">const containersMap = {
+    [PAGE_TYPE_ERROR]: getErrorContainer,
+    [PAGE_TYPE_TAB_TEXT]: textTabLoader,
+}</div>
+</pre>
+                    </section>
+                    <section>
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
 
     update = chunks => {
-        const [ Content, Aside, convert ] = chunks.map(chunk => chunk && chunk.default)
+        const [ Content, convert ] = chunks.map(chunk => chunk.default)
 
-        this.AsideContainer = Aside
-        this.ContentContainer = Content
-
-        this.props.convertPageData({ payload: this.data, convert })
+        this.Content = Content
+        this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        })
     }
-}
-                        </div></pre>
+
+    loadPage() {
+        <b>const loaderType = getLoaderType(routeProps)</b>
+        this.props.containersMap[loaderType]().then(this.update)
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
                     </section>
                     <section>
-                        <h2>
-                            Redux store splitting
-                        </h2>
-                        <pre>const createStore = ({ initialState, reducers }) => {
-    const middlewares = [applyMiddleware(thunk)]
-    const createStoreWithMiddleware = compose(...middlewares)(createStore)
-    const store = createStoreWithMiddleware(combineReducers(reducers), initialState)
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
+
+    update = chunks => {
+        const [ Content, convert ] = chunks.map(chunk => chunk.default)
+
+        this.Content = Content
+        this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        })
+    }
+
+    loadPage() {
+        const loaderType = getLoaderType(routeProps)
+        <b>this.props.containersMap[loaderType]().then(this.update)</b>
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
+
+    update = chunks => {
+        <b>const [ Content, convert ] = chunks.map(chunk => chunk.default)</b>
+
+        this.Content = Content
+        this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        })
+    }
+
+    loadPage() {
+        const loaderType = getLoaderType(routeProps)
+        this.props.containersMap[loaderType]().then(this.update)
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
+
+    update = chunks => {
+        const [ Content, convert ] = chunks.map(chunk => chunk.default)
+
+        <b>this.Content = Content</b>
+        this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        })
+    }
+
+    loadPage() {
+        const loaderType = getLoaderType(routeProps)
+        this.props.containersMap[loaderType]().then(this.update)
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
+
+    update = chunks => {
+        const [ Content, convert ] = chunks.map(chunk => chunk.default)
+
+        this.Content = Content
+        <b>this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        })</b>
+    }
+
+    loadPage() {
+       const loaderType = getLoaderType(routeProps)
+        this.props.containersMap[loaderType]().then(this.update)
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h2>Redux store splitting</h2>
+                    </section>
+                    <section>
+                        <h3>Создаем store</h3>
+                        <pre>import { compose, applyMiddleware, combineReducers } from 'redux'
+
+const createStore = ({ initialState, reducers }) => {
+    const middlewares = applyMiddleware(thunk)
+    const createStore = compose(middlewares)(createStore)
+    const store = createStore(combineReducers(reducers), initialState)
 
     <b>store.reducers = reducers
     store.asyncReducers = {}</b>
 
     return store
-}
-                        </pre>
+}</pre>
                     </section>
                     <section>
+                        <h3>Хелпер для обновления store</h3>
                         <pre>const injectAsyncReducer = ({ store, name, asyncReducer }) => {
     <b>store.asyncReducers[name] = asyncReducer</b>
     store.replaceReducer(combineReducers({
@@ -502,6 +603,7 @@
 }</pre>
                     </section>
                     <section>
+                        <h3>Хелпер для обновления store</h3>
                         <pre>const injectAsyncReducer = ({ store, name, asyncReducer }) => {
     store.asyncReducers[name] = asyncReducer
     <b>store.replaceReducer(combineReducers({
@@ -511,10 +613,10 @@
 }</pre>
                     </section>
                     <section>
+                        <h3>Обновление store</h3>
                         <pre>class PageContainer {
     update = chunks => {
-        const [ Content, Aside, convert, asyncReducer ] = chunks
-            .map(chunk => chunk && chunk.default)
+        const [ Content, convert, asyncReducer ] = chunks.map(chunk.default)
         
         //...
         <b>injectAsyncReducer({
@@ -523,9 +625,10 @@
             asyncReducer,
         })</b>
     }
-}
-
-                        </pre>
+}</pre>
+                    </section>
+                    <section>
+                        <h1>-100кб сжатого кода</h1>
                     </section>
                     <section>
                         <h2>
@@ -533,7 +636,10 @@
                         </h2>
                     </section>
                     <section>
-                        <pre>const getLoadableAction =
+                        <h3>Хелпер для получения<br>async loading actions</h3>
+                        <pre>// @ug/helpers/redux
+
+const getLoadableAction =
     <b>getLoader =></b>
         ({ name, async }) =>
             (...args) => (dispatch, getState) =>
@@ -545,7 +651,10 @@
 </pre>
                     </section>
                     <section>
-                        <pre>const getLoadableAction =
+                        <h3>Хелпер для получения<br>async loading actions</h3>
+                        <pre>// @ug/helpers/redux
+
+const getLoadableAction =
     getLoader =>
         <b>({ name, async }) =></b>
             (...args) => (dispatch, getState) =>
@@ -557,7 +666,10 @@
 </pre>
                     </section>
                     <section>
-                        <pre>const getLoadableAction =
+                        <h3>Хелпер для получения<br>async loading actions</h3>
+                        <pre>// @ug/helpers/redux
+
+const getLoadableAction =
     getLoader =>
         ({ name, async }) =>
             <b>(...args) => (dispatch, getState) =></b>
@@ -569,7 +681,10 @@
 </pre>
                     </section>
                     <section>
-                        <pre>const getLoadableAction =
+                        <h3>Хелпер для получения<br>async loading actions</h3>
+                        <pre>// @ug/helpers/redux
+
+const getLoadableAction =
     getLoader =>
         ({ name, async }) =>
             (...args) => (dispatch, getState) =>
@@ -581,6 +696,7 @@
 </pre>
                     </section>
                     <section>
+                        <h3>Сoздание <br>async loading actions</h3>
                         <pre>import { getLoadableAction } from '@ug/helpers/redux'
                         
 const getCommentsActionsLoader = () => import('./commentsActions')
@@ -627,7 +743,7 @@ export const editComment = getCommentsAction({ name: 'editComment', async: true 
                             <li class="fragment">не используем на мобе)))</li>
                         </ul>
                     </section>
-                    <section data-background="img/58.png">
+                    <section data-background="img/wthb.png">
                     </section>
                     <section>
                         <h1>Load<br>15s => 2s</h1>
@@ -642,7 +758,7 @@ export const editComment = getCommentsAction({ name: 'editComment', async: true 
 </p>
                     </section>
                     <section>
-                        <blockquote>Не надо грузить всю страницу целиком</blockquote>
+                        <h2>Как не грузить<br>всю старницу целиком</h2>
                     </section>
                     <section>
                         <h2>Показывай только то,<br>что во viewport</h2>
@@ -663,7 +779,24 @@ export const editComment = getCommentsAction({ name: 'editComment', async: true 
                         <pre><div>import Loadable from 'react-loadable'
 import logHelper from './logHelper'
                     
-export default loader => Loadable({
+<b>const createLoadable => Loadable({
+    loader,
+    loading(props) {
+        if (props.error) {
+            logHelper.error(props.error)
+        }
+        return null
+    },
+})</b>
+
+const AsyncFooterContainer = createLoadable(() => import('./FooterContainer'))
+</div></pre>
+                    </section>
+                    <section>
+                        <pre><div>import Loadable from 'react-loadable'
+import logHelper from './logHelper'
+                    
+const createLoadable => Loadable({
     loader,
     loading(props) {
         if (props.error) {
@@ -672,25 +805,19 @@ export default loader => Loadable({
         return null
     },
 })    
+
+<b>const AsyncFooterContainer = createLoadable(() => import('./FooterContainer'))</b>
 </div></pre>
                     </section>
                     <section>
-                        <pre><div>import createLoadable from '@ug/helpers/createLoadable'
-
-const loadFooterContainer = () => import('./FooterContainer')
-
-export default createLoadable(loadFooterContainer)</div></pre>
-                    </section>
-                    <section>
                         <h2>Стили грузим по частям</h2>
-                        <p>Вместе с компонентами дизайн системы.</p>
                         <ul>
                             <li>Только те стили, которые нужны</li>
                             <li>Без дополнительных запросов</li>
                         </ul>
                     </section>
                     <section>
-                        <h2>Асинхронно подгружаемая реклама</h2>
+                        <h2>Асинхронно<br>подгружаемая реклама</h2>
                     </section>
                     <section>
                         <img src="img/ad.gif" />
@@ -705,7 +832,7 @@ export default createLoadable(loadFooterContainer)</div></pre>
                     </section>
                     <section data-background="img/ui.jpg"></section>
                     <section>
-                        <h1>Как уменьшить размер бандла</h1>
+                        <h1>Как уменьшить<br>размер бандла</h1>
                     </section>
                     <section>
                         <ul>
@@ -716,7 +843,7 @@ export default createLoadable(loadFooterContainer)</div></pre>
                                 Аглификация имен классов
                             </li>
                             <li>
-                               Не все сладости одинаково полезны (про новые фичи языка и уже не особо)...
+                               Не все сладости одинаково полезны...
                             </li>
                             <li>
                                 Babel 7
@@ -739,12 +866,12 @@ export default createLoadable(loadFooterContainer)</div></pre>
                                 32 кб GZIP кода (React + React DOM)
                             </li>
                             <li>
-                                6кб GZIP кода (Preact + Preact-Compat)
+                                <b>6кб GZIP кода (Preact + Preact-Compat)</b>
                             </li>
                         </ul>
                     </section>
                     <section>
-                        <h2>Для фронта без изменений</h2>
+                        <h2>На фронте без изменений </h2>
                         <pre>module.exports = {
     resolve: {
         alias: {
@@ -756,12 +883,28 @@ export default createLoadable(loadFooterContainer)</div></pre>
 }</pre>
                     </section>
                     <section>
-                        <h2>Аглификация имен классов</h2>
+                        <h2>Аглификация имен css классов</h2>
                     </section>
                     <section data-background="img/77.png"></section>
                     <section data-background="img/78.png"></section>
                     <section>
-                        <h2>Не все сладости одинаково полезны</h2>
+                        <h2>Конфиг webpack</h2>
+                        <pre>const createCssLoader = ({ isDevelopment, cssLoader }) => ({
+    loader: 'css-loader',
+    options: {
+        minimize: !isDevelopment,
+        sourceMap: false, // isDevelopment,
+        modules: true,
+        camelCase: true,
+        url: true,
+        importLoaders: 1,
+        <b>localIdentName: isDevelopment ? '[name]--[local]--[hash:base64:5]' : '[hash:base64:5]',</b>
+        ...(cssLoader || {}),
+    },
+})</pre>
+                    </section>
+                    <section>
+                        <h2>Не все сладости<br>одинаково полезны</h2>
                     </section>
                     <section>
                         <h2>
@@ -845,14 +988,16 @@ var getSymbolContent = function () {
                     </section>
                     <section>
                         <h2>А теперь пожмем</h2>
-                        <pre><div>var r=function(){var r=_asyncToGenerator(regeneratorRuntime.mark(function r(e){var n;return
-                        regeneratorRuntime.wrap(function(r){for(;;)switch(r.prev=r.next){case 0:return r.next=2,y(x);case 2:return
-                        n=r.sent,r.abrupt("return",u(n));case 4:case"end":return r.stop()}},r,void 0)}));return function(e){return
+                        <pre><div>var r=function(){var r=a(m.mark(function r(e){var n;return
+                        m.wrap(function(r){for(;;)switch(r.prev=r.next){
+                            case 0:return r.next=2,y(x);case 2:return n=r.sent
+                            ,r.abrupt("return",u(n));case 4:case"end":return r.stop()}},
+                            r,void 0)}));return function(e){return
                         r.apply(this,arguments)}}();</div></pre>
                         <pre><div>var m=function(n){return b(x).then(e)};</div></pre>
                     </section>
                     <section>
-                        <h1>334 БАЙТА<br>vs<br>39 БАЙТ</h1>
+                        <h1>247 БАЙТ<br>vs<br>39 БАЙТ</h1>
                     </section>
                     <section>
                         <h2>Классы против функций</h2>
@@ -927,7 +1072,7 @@ connect(function(state) {
 </pre></div>
                     </section>
                     <section>
-                        <h2>То же самое в функцианальном стиле</h2>
+                        <h2>То же самое<br>в функциональном стиле</h2>
                         <div><pre>compose(
       connect(state => ({
           isOpen: state.notifications.isOpen,
@@ -940,7 +1085,7 @@ connect(function(state) {
                         <h1>355 байт<br>vs<br>94 байта</h1>
                     </section>
                     <section>
-                        <blockquote>Стиль программирования влияет на вес приложения</blockquote>
+                        <H2>Стиль программирования<br>влияет на вес приложения</h2>
                     </section>
                     <section>
                         <h2>Babel 7</h2>
@@ -952,7 +1097,7 @@ connect(function(state) {
                                 Держите сборку в loose режиме нам дало еще <b>-3%</b>
                             </li>
                             <li>
-                                Babel runtime тащится по частям
+                                Babel runtime тащится core.js по частям
                             </li>
                         </ul>
                     </section>
@@ -985,13 +1130,13 @@ connect(function(state) {
                     </section>
                     <section>
                         <div style="padding: 0 5%">
-                            <h2>Первый шаг по ускорению</h2>
+                            <h2>Что дальше</h2>
                             <ol>
                                 <li>
                                     Выберите 1-2 инструмента/приема.
                                 </li>
                                 <li>
-                                    Запостите на Facebook/Twitter с хештегами <b>#fontendconf</b> <b>#скоростьнашевсе</b>
+                                    Запостите на Facebook/Twitter с хештегами <b>#FrontendConf2018</b> <b>#CкоростьНашеВсе</b>
                                 </li>
                                 <li>
                                     Пишите мне, если появятся вопросы
