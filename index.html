@@ -768,8 +768,7 @@ const getLoadableAction =
                         <h3>Сoздание <br>async loading actions</h3>
                         <pre>import { getLoadableAction } from '@ug/helpers/redux';
                         
-const getCommentsActionsLoader = () => import('./commentsActions');
-const getCommentsAction = getLoadableAction(getCommentsActionsLoader);
+const getCommentsAction = getLoadableAction(() => import('./commentsActions'));
 
 export const addComment = getCommentsAction({ name: 'addComment', async: true });
 export const editComment = getCommentsAction({ name: 'editComment', async: true });
