@@ -193,7 +193,7 @@
                         <p>Когда интернет широкий, то и проблем нет</p>
                         <ul>
                             <li>
-                                Dom ready - 1.2с
+                                DOM ready - 1.2с
                             </li>
                             <li>
                                 PageSpeed > 90
@@ -361,15 +361,7 @@
                         <h2>Сбор метрик</h2>
                         <ul>
                             <li>
-                                Скорость загрузки
-                                <ul>
-                                    <li>
-                                        Агрегируем метрики <b>window.performance.timing</b>
-                                    </li>
-                                    <li>
-                                        Почасовая агрегация
-                                    </li>
-                                </ul>
+                                Скорость загрузки - <b>window.performance.timing</b>
                             </li>
                             <li>
                                 Pagespeed - собираем через <b>API v4</b> Google
@@ -429,7 +421,7 @@
                                 Ставь полезные ограничения, которые позволят твоему сервису оставаться более простым и быстрым
                             </li>
                             <li>
-                                Периодически проводи палановый perfomance аудит своего сервиса
+                                Периодически проводи плановый perfomance аудит своего сервиса
                             </li>
                         </ul>
                     </section>
@@ -483,8 +475,8 @@
     }
 }
 
-<div class="fragment">const getRouteType = routingMap => props => {
-    return routingMap?[props.module]?[props.controller]?[props.action] || ROUTE_TYPE_DEFAULT
+<div class="fragment">const getRouteType = ({ routingMap, props }) => {
+    return routingMap?[props.module]?[props.controller]?[props.action] || ROUTE_TYPE_DEFAULT;
 }</div>
 </pre>
                     </section>
@@ -507,18 +499,81 @@
     Content = null
 
     update = chunks => {
-        const [ Content, convert ] = chunks.map(chunk => chunk.default)
+        const [ Content, convert ] = chunks.map(chunk => chunk.default);
 
-        this.Content = Content
+        this.Content = Content;
         this.props.convertPageData({ 
             payload: this.props.data, 
             convert,
-        })
+        });
     }
 
     loadPage() {
-        <b>const routeType = getRouteType(routeProps)</b>
-        this.props.loadersMap[routeType]().then(this.update)
+        <b>const routeType = getRouteType({ 
+            props: this.props.routeProps,
+            routingMap: this.props.routungMap,
+        });</b>
+        this.props.loadersMap[routeType]().then(this.update);
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
+
+    update = chunks => {
+        const [ Content, convert ] = chunks.map(chunk => chunk.default);
+
+        this.Content = Content;
+        this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        });
+    }
+
+    loadPage() {
+        const routeType = getRouteType({
+            props: this.props.routeProps,
+            routingMap: this.props.routungMap,
+        });
+        <b>this.props.loadersMap[routeType]().then(this.update);</b>
+    }
+
+    render() {
+        return (
+            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
+        )
+    }
+}</pre>
+                    </section>
+                    <section>
+                        <h3>Грузим контент страницы</h3>
+                        <pre>class PageContainer extends Component {
+    Content = null
+
+    update = chunks => {
+        <b>const [ Content, convert ] = chunks.map(chunk => chunk.default);</b>
+
+        this.Content = Content;
+        this.props.convertPageData({ 
+            payload: this.props.data, 
+            convert,
+        });
+    }
+
+    loadPage() {
+        const routeType = getRouteType({
+            props: this.props.routeProps,
+            routingMap: this.props.routungMap,
+        });
+        this.props.loadersMap[routeType]().then(this.update);
     }
 
     render() {
@@ -536,16 +591,19 @@
     update = chunks => {
         const [ Content, convert ] = chunks.map(chunk => chunk.default)
 
-        this.Content = Content
+        <b>this.Content = Content;</b>
         this.props.convertPageData({ 
             payload: this.props.data, 
             convert,
-        })
+        });
     }
 
     loadPage() {
-        const routeType = getRouteType(routeProps)
-        <b>this.props.loadersMap[routeType]().then(this.update)</b>
+        const routeType = getRouteType({
+            props: this.props.routeProps,
+            routingMap: this.props.routungMap,
+        });
+        this.props.loadersMap[routeType]().then(this.update);
     }
 
     render() {
@@ -561,72 +619,21 @@
     Content = null
 
     update = chunks => {
-        <b>const [ Content, convert ] = chunks.map(chunk => chunk.default)</b>
+        const [ Content, convert ] = chunks.map(chunk => chunk.default);
 
-        this.Content = Content
-        this.props.convertPageData({ 
-            payload: this.props.data, 
-            convert,
-        })
-    }
-
-    loadPage() {
-        const routeType = getRouteType(routeProps)
-        this.props.loadersMap[routeType]().then(this.update)
-    }
-
-    render() {
-        return (
-            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
-        )
-    }
-}</pre>
-                    </section>
-                    <section>
-                        <h3>Грузим контент страницы</h3>
-                        <pre>class PageContainer extends Component {
-    Content = null
-
-    update = chunks => {
-        const [ Content, convert ] = chunks.map(chunk => chunk.default)
-
-        <b>this.Content = Content</b>
-        this.props.convertPageData({ 
-            payload: this.props.data, 
-            convert,
-        })
-    }
-
-    loadPage() {
-        const routeType = getRouteType(routeProps)
-        this.props.loadersMap[routeType]().then(this.update)
-    }
-
-    render() {
-        return (
-            &lt;LayoutContainer&gt;{this.Content}&lt;/LayoutContainer&gt;
-        )
-    }
-}</pre>
-                    </section>
-                    <section>
-                        <h3>Грузим контент страницы</h3>
-                        <pre>class PageContainer extends Component {
-    Content = null
-
-    update = chunks => {
-        const [ Content, convert ] = chunks.map(chunk => chunk.default)
-
-        this.Content = Content
+        this.Content = Content;
         <b>this.props.convertPageData({ 
             payload: this.props.data, 
             convert,
-        })</b>
+        });</b>
     }
 
     loadPage() {
-       const routeType = getRouteType(routeProps)
-        this.props.loadersMap[routeType]().then(this.update)
+        const routeType = getRouteType({
+            props: this.props.routeProps,
+            routingMap: this.props.routungMap,
+        });
+        this.props.loadersMap[routeType]().then(this.update);
     }
 
     render() {
@@ -644,12 +651,12 @@
                         <pre>import { compose, applyMiddleware, combineReducers } from 'redux'
 
 const createStore = ({ initialState, reducers }) => {
-    const middlewares = applyMiddleware(thunk)
-    const createStore = compose(middlewares)(createStore)
-    const store = createStore(combineReducers(reducers), initialState)
+    const middlewares = applyMiddleware(thunk);
+    const createStore = compose(middlewares)(createStore);
+    const store = createStore(combineReducers(reducers), initialState);
 
-    <b>store.reducers = reducers
-    store.asyncReducers = {}</b>
+    <b>store.reducers = reducers;
+    store.asyncReducers = {};</b>
 
     return store
 }</pre>
@@ -657,34 +664,34 @@ const createStore = ({ initialState, reducers }) => {
                     <section>
                         <h3>Хелпер для обновления store</h3>
                         <pre>const injectAsyncReducer = ({ store, name, asyncReducer }) => {
-    <b>store.asyncReducers[name] = asyncReducer</b>
+    <b>store.asyncReducers[name] = asyncReducer;</b>
     store.replaceReducer(combineReducers({
         ...store.reducers,
         ...store.asyncReducers,
-    }))
+    }));
 }</pre>
                     </section>
                     <section>
                         <h3>Хелпер для обновления store</h3>
                         <pre>const injectAsyncReducer = ({ store, name, asyncReducer }) => {
-    store.asyncReducers[name] = asyncReducer
+    store.asyncReducers[name] = asyncReducer;
     <b>store.replaceReducer(combineReducers({
         ...store.reducers,
         ...store.asyncReducers,
-    }))</b>
+    }));</b>
 }</pre>
                     </section>
                     <section>
                         <h3>Обновление store</h3>
                         <pre>class PageContainer {
     update = chunks => {
-        const [ Content, convert, asyncReducer ] = chunks.map(chunk.default)
+        const [ Content, convert, asyncReducer ] = chunks.map(chunk.default);
         
         <b>injectAsyncReducer({
             store: this.context.store,
             name: STORE_REDUCER_NAME_CONTENT,
             asyncReducer,
-        })</b>
+        });</b>
         //...
     }
 }</pre>
@@ -759,13 +766,13 @@ const getLoadableAction =
                     </section>
                     <section>
                         <h3>Сoздание <br>async loading actions</h3>
-                        <pre>import { getLoadableAction } from '@ug/helpers/redux'
+                        <pre>import { getLoadableAction } from '@ug/helpers/redux';
                         
-const getCommentsActionsLoader = () => import('./commentsActions')
-const getCommentsAction = getLoadableAction(getCommentsActionsLoader)
+const getCommentsActionsLoader = () => import('./commentsActions');
+const getCommentsAction = getLoadableAction(getCommentsActionsLoader);
 
-export const addComment = getCommentsAction({ name: 'addComment', async: true })
-export const editComment = getCommentsAction({ name: 'editComment', async: true })
+export const addComment = getCommentsAction({ name: 'addComment', async: true });
+export const editComment = getCommentsAction({ name: 'editComment', async: true });
 //...
 </pre>
                     </section>
@@ -838,8 +845,8 @@ export const editComment = getCommentsAction({ name: 'editComment', async: true 
                         </ul>
                     </section>
                     <section>
-                        <pre><div>import Loadable from 'react-loadable'
-import logHelper from './logHelper'
+                        <pre><div>import Loadable from 'react-loadable';
+import logHelper from './logHelper';
                     
 <b>const createLoadable => Loadable({
     loader,
@@ -849,14 +856,14 @@ import logHelper from './logHelper'
         }
         return null
     },
-})</b>
+});</b>
 
-const AsyncFooterContainer = createLoadable(() => import('./FooterContainer'))
+const AsyncFooterContainer = createLoadable(() => import('./FooterContainer'));
 </div></pre>
                     </section>
                     <section>
-                        <pre><div>import Loadable from 'react-loadable'
-import logHelper from './logHelper'
+                        <pre><div>import Loadable from 'react-loadable';
+import logHelper from './logHelper';
                     
 const createLoadable => Loadable({
     loader,
@@ -866,9 +873,9 @@ const createLoadable => Loadable({
         }
         return null
     },
-})    
+});
 
-<b>const AsyncFooterContainer = createLoadable(() => import('./FooterContainer'))</b>
+<b>const AsyncFooterContainer = createLoadable(() => import('./FooterContainer'));</b>
 </div></pre>
                     </section>
                     <section>
@@ -983,7 +990,7 @@ const createLoadable => Loadable({
         <b>localIdentName: isDevelopment ? '[name]--[local]--[hash:base64:5]' : '[hash:base64:5]',</b>
         ...(cssLoader || {}),
     },
-})</pre>
+});</pre>
                     </section>
                     <section>
                         <h2>Не все сладости<br>одинаково полезны</h2>
@@ -998,8 +1005,8 @@ const createLoadable => Loadable({
                             До
                         </h2>
                         <pre style="font-size: 0.75em"><div>const getSymbolContent = async filePath => {
-    const content = await readFileAsync(filePath)
-    return unwrap(content)
+    const content = await readFileAsync(filePath);
+    return unwrap(content);
 }</div></pre>
                     </section>
                     <section>
@@ -1068,7 +1075,7 @@ var getSymbolContent = function () {
                             То же самое на Promise
                         </h2>
                         <pre style="font-size: 0.75em"><div>const getSymbolContent = function(filePath) {
-    return readFileAsync(filePath).then(unwrap)
+    return readFileAsync(filePath).then(unwrap);
 }</div></pre>
                     </section>
                     <section>
