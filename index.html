@@ -1095,15 +1095,15 @@ var getSymbolContent = function () {
                         <h2>Классы против функций</h2>
                     </section>
                     <section>
-                        <pre><div>class NotificationMobilePageContainer extends Component {
+                        <pre><div>@connect(state => ({
+    isOpen: state.notifications.isOpen,
+}))(NotificationMobilePageContainer)
+class NotificationMobilePageContainer extends Component {
     render() {
         return this.props.isOpen && &lt;AsyncUserNotificationsContainer /&gt;
     }
 }
-
-connect(state => ({
-    isOpen: state.notifications.isOpen,
-}))(NotificationMobilePageContainer)</div></pre>
+</div></pre>
                     </section>
                     <section>
                         <pre><div style="font-size: .85em;line-height: normal;">function e() {
